@@ -4,6 +4,8 @@ pg.init()
 width = 1296
 height = 720
 
+INV = (0, 0, 0, 0)
+
 FPS = 60
 clock = pg.time.Clock()
 
@@ -16,7 +18,12 @@ icon = pg.transform.scale(icon, (40, 40))
 background_main = pg.image.load("Images/bg_main.jpg")
 background_main = pg.transform.scale(background_main, (1296, 720))
 
+background_puzzle = pg.image.load("Images/bg_puzzle.jpg")
+
+pos = pg.mouse.get_pos()
+
 pg.display.set_icon(icon)
+
 state = True
 
 lvl1 = pg.image.load("Images/btn_img.png")
@@ -54,6 +61,12 @@ while state:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             state = False
+        # if event.type == pg.MOUSEBUTTONDOWN:
+        #     if event.button == 1:
+        #         pos = pg.mouse.get_pos()
+        #         if lvl1.left <= pos[0] <= lvl1.right and lvl1.top <= pos[1] <= lvl1.bottom:
+        #             window.blit(background_puzzle, (0, 0))
+
 
     font = pg.font.Font("Fonts/ThisAppealFont.otf", 128)
     lvl_font = pg.font.SysFont("Arial", 320)
