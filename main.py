@@ -26,6 +26,35 @@ pos = pg.mouse.get_pos()
 
 pg.display.set_icon(icon)
 
+btn_image = pg.image.load("Images/btn_img.png")
+btn_image = pg.transform.scale(btn_image, (244, 244))
+btn_size = btn_image.get_rect().size
+
+background_img = pg.image.load("Images/bg_main.jpg")
+
+# class Button:
+#     def __init__(self, image, position):
+#         self.image = image
+#         self.rect = self.image.get_rect(topleft=position)
+#
+#     def draw(self, surface):
+#         surface.blit(self.image, self.rect)
+#
+# button_positions = [
+#     (10, 212), #1
+#     (264, 212), #2
+#     (518, 212), #3
+#     (772, 212), #4
+#     (1026, 212), #5
+#     (10, 466), #6
+#     (264, 466), #7
+#     (518, 466), #8
+#     (772, 466), #9
+#     (1026, 466)#10
+# ]
+
+# buttons = [Button(btn_image, pos) for pos in button_positions]
+
 lvl1 = pg.image.load("Images/btn_img.png")
 lvl1 = pg.transform.scale(lvl1, (244, 244))
 lvl1_rect = pg.Rect(10, 212, 244, 244)
@@ -65,53 +94,9 @@ lvl9_rect = pg.Rect(772, 466, 244, 244)
 lvl10 = pg.image.load("Images/btn_img.png")
 lvl10 = pg.transform.scale(lvl10, (244, 244))
 lvl10_rect = pg.Rect(1026, 466, 244, 244)
-
+#
 exit_img = pg.image.load("Images/exit.png")
 exit_img = pg.transform.scale(exit_img, (64, 64))
-
-class Lvl(pg.sprite.Sprite):
-
-    def __init__(self, btn_img):
-        pg.sprite.Sprite.__init__(self)
-        self.image = pg.image.load(btn_img.png)
-        self.rect = self.image.get_rect(center=btn_img.get_rect().center)
-
-    def lvl_display(self):
-        if event.type == pg.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                if self.rect.collidepoint(pos):
-                    if self == lvl1:
-                        window.blit(background_puzzle, (0, 0))
-                        window.blit(exit_img, (1192, 24))
-                    elif self == lvl2:
-                        window.blit(background_puzzle, (0, 0))
-                        window.blit(exit_img, (1192, 24))
-                    elif self == lvl3:
-                        window.blit(background_puzzle, (0, 0))
-                        window.blit(exit_img, (1192, 24))
-                    elif self == lvl4:
-                        window.blit(background_puzzle, (0, 0))
-                        window.blit(exit_img, (1192, 24))
-                    elif self == lvl5:
-                        window.blit(background_puzzle, (0, 0))
-                        window.blit(exit_img, (1192, 24))
-                    elif self == lvl6:
-                        window.blit(background_puzzle, (0, 0))
-                        window.blit(exit_img, (1192, 24))
-                    elif self == lvl7:
-                        window.blit(background_puzzle, (0, 0))
-                        window.blit(exit_img, (1192, 24))
-                    elif self == lvl8:
-                        window.blit(background_puzzle, (0, 0))
-                        window.blit(exit_img, (1192, 24))
-                    elif self == lvl9:
-                        window.blit(background_puzzle, (0, 0))
-                        window.blit(exit_img, (1192, 24))
-                    elif self == lvl10:
-                        window.blit(background_puzzle, (0, 0))
-                        window.blit(exit_img, (1192, 24))
-                    else:
-                        pass
 
 
 while state:
@@ -167,46 +152,75 @@ while state:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             state = False
+        # elif event.type == pg.MOUSEBUTTONDOWN:
+        #     if event.button == 1:
+        #         for index, button in enumerate(buttons):
+        #             if button.rect.collidepoint(event.pos):
+        #                 background_img = pg.image.load("Images/bg_puzzle.jpg")
+        #                 if index == 0:
+        #
+        #
+        #                     window.blit(exit_img, (1192, 24))
+        #                 elif index == 1:
+        #
+        #                     window.blit(exit_img, (1192, 24))
+        #                 elif index == 2:
+        #
+        #                     window.blit(exit_img, (1192, 24))
+        #                 elif index == 3:
+        #
+        #                     window.blit(exit_img, (1192, 24))
+        #                 elif index == 4:
+        #
+        #                     window.blit(exit_img, (1192, 24))
+        #                 elif index == 5:
+        #
+        #                     window.blit(exit_img, (1192, 24))
+        #                 elif index == 6:
+        #
+        #                     window.blit(exit_img, (1192, 24))
+        #                 elif index == 7:
+        #
+        #                     window.blit(exit_img, (1192, 24))
+        #                 elif index == 8:
+        #
+        #                     window.blit(exit_img, (1192, 24))
+        #                 elif index == 9:
+        #
+        #                     window.blit(exit_img, (1192, 24))
+
+
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1:
+                background_img = pg.image.load("Images/bg_puzzle.jpg")
                 if lvl1_rect.collidepoint(pos):
-                    window.blit(background_puzzle, (0, 0))
                     window.blit(exit_img, (1192, 24))
 
                 elif lvl2_rect.collidepoint(pos):
-                    window.blit(background_puzzle, (0, 0))
                     window.blit(exit_img, (1192, 24))
 
                 elif lvl3_rect.collidepoint(pos):
-                    window.blit(background_puzzle, (0, 0))
                     window.blit(exit_img, (1192, 24))
 
                 elif lvl4_rect.collidepoint(pos):
-                    window.blit(background_puzzle, (0, 0))
                     window.blit(exit_img, (1192, 24))
 
                 elif lvl5_rect.collidepoint(pos):
-                    window.blit(background_puzzle, (0, 0))
                     window.blit(exit_img, (1192, 24))
 
                 elif lvl6_rect.collidepoint(pos):
-                    window.blit(background_puzzle, (0, 0))
                     window.blit(exit_img, (1192, 24))
 
                 elif lvl7_rect.collidepoint(pos):
-                    window.blit(background_puzzle, (0, 0))
                     window.blit(exit_img, (1192, 24))
 
                 elif lvl8_rect.collidepoint(pos):
-                    window.blit(background_puzzle, (0, 0))
                     window.blit(exit_img, (1192, 24))
 
                 elif lvl9_rect.collidepoint(pos):
-                    window.blit(background_puzzle, (0, 0))
                     window.blit(exit_img, (1192, 24))
 
                 elif lvl10_rect.collidepoint(pos):
-                    window.blit(background_puzzle, (0, 0))
                     window.blit(exit_img, (1192, 24))
 
     clock.tick(FPS)
