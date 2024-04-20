@@ -32,28 +32,25 @@ btn_size = btn_image.get_rect().size
 
 background_img = pg.image.load("Images/bg_main.jpg")
 
-# class Button:
-#     def __init__(self, image, position):
-#         self.image = image
-#         self.rect = self.image.get_rect(topleft=position)
-#
-#     def draw(self, surface):
-#         surface.blit(self.image, self.rect)
-#
-# button_positions = [
-#     (10, 212), #1
-#     (264, 212), #2
-#     (518, 212), #3
-#     (772, 212), #4
-#     (1026, 212), #5
-#     (10, 466), #6
-#     (264, 466), #7
-#     (518, 466), #8
-#     (772, 466), #9
-#     (1026, 466)#10
-# ]
+class Button:
+    def __init__(self, x, y, index, image):
+        self.x = x
+        self.y = y
+        self.index = index
+        self.rect = pg.Rect
+        self.image = image
 
-# buttons = [Button(btn_image, pos) for pos in button_positions]
+r1 = Button(10, 212, 1, "Images/btn_image.png")
+r2 = Button(264, 212, 2, "Images/btn_image.png")
+r3 = Button(518, 212, 3, "Images/btn_image.png")
+r4 = Button(772, 212, 4, "Images/btn_image.png")
+r5 = Button(1026, 212, 5, "Images/btn_image.png")
+r6 = Button(10, 466, 6, "Images/btn_image.png")
+r7 = Button(264, 466, 7, "Images/btn_image.png")
+r8 = Button(518, 466, 8, "Images/btn_image.png")
+r9 = Button(772, 466, 9, "Images/btn_image.png")
+r10 = Button(1026, 466, 10, "Images/btn_image.png")
+
 
 lvl1 = pg.image.load("Images/btn_img.png")
 lvl1 = pg.transform.scale(lvl1, (244, 244))
@@ -147,6 +144,17 @@ while state:
 
     window.blit(lvl10, (1026, 466))
     window.blit(btn10_txt, (1084, 506))
+
+    # window.blit(r1)
+    # window.blit(r2)
+    # window.blit(r3)
+    # window.blit(r4)
+    # window.blit(r5)
+    # window.blit(r6)
+    # window.blit(r7)
+    # window.blit(r8)
+    # window.blit(r9)
+    # window.blit(r10)
 
     pos = pg.mouse.get_pos()
     for event in pg.event.get():
