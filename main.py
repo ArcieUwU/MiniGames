@@ -17,8 +17,8 @@ window = pg.display.set_mode((width, height))
 icon = pg.image.load("Images/icon_logo.png")
 icon = pg.transform.scale(icon, (40, 40))
 
-background_main = pg.image.load("Images/bg_main.jpg")
-background_main = pg.transform.scale(background_main, (1280, 720))
+background = pg.image.load("Images/bg_main.jpg")
+background = pg.transform.scale(background, (1280, 720))
 
 background_puzzle = pg.image.load("Images/bg_puzzle.jpg")
 
@@ -94,7 +94,7 @@ lvl9_rect = pg.Rect(772, 466, 244, 244)
 lvl10 = pg.image.load("Images/btn_img.png")
 lvl10 = pg.transform.scale(lvl10, (244, 244))
 lvl10_rect = pg.Rect(1026, 466, 244, 244)
-#
+
 exit_img = pg.image.load("Images/exit.png")
 exit_img = pg.transform.scale(exit_img, (64, 64))
 
@@ -104,7 +104,7 @@ while state:
     font = pg.font.Font("Fonts/ThisAppealFont.otf", 128)
     lvl_font = pg.font.SysFont("Arial", 144)
     text = font.render("WORLD'S HARDEST PUZZLE GAME", 1, (255, 255, 255))
-    window.blit(background_main, (0, 0))
+    window.blit(background, (0, 0))
     window.blit(text, (168, 48))
 
     btn1_txt = lvl_font.render("1", 1, (255, 255, 255))
@@ -192,7 +192,7 @@ while state:
 
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1:
-                background_img = pg.image.load("Images/bg_puzzle.jpg")
+                background = pg.image.load("Images/bg_puzzle.jpg")
                 if lvl1_rect.collidepoint(pos):
                     window.blit(exit_img, (1192, 24))
 
