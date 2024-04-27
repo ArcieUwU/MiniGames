@@ -27,69 +27,60 @@ pos = pg.mouse.get_pos()
 pg.display.set_icon(icon)
 
 btn_image = pg.image.load("Images/btn_img.png")
-btn_image = pg.transform.scale(btn_image, (244, 244))
-btn_size = btn_image.get_rect().size
 
 background_img = pg.image.load("Images/bg_main.jpg")
 
 class Button:
+
     def __init__(self, x, y, index, image):
+        pg.sprite.Sprite.__init__(self)
+        self.index = index
         self.x = x
         self.y = y
-        self.index = index
-        self.rect = pg.Rect
         self.image = image
+        self.rect = pg.Rect
 
-r1 = Button(10, 212, 1, "Images/btn_image.png")
-r2 = Button(264, 212, 2, "Images/btn_image.png")
-r3 = Button(518, 212, 3, "Images/btn_image.png")
-r4 = Button(772, 212, 4, "Images/btn_image.png")
-r5 = Button(1026, 212, 5, "Images/btn_image.png")
-r6 = Button(10, 466, 6, "Images/btn_image.png")
-r7 = Button(264, 466, 7, "Images/btn_image.png")
-r8 = Button(518, 466, 8, "Images/btn_image.png")
-r9 = Button(772, 466, 9, "Images/btn_image.png")
-r10 = Button(1026, 466, 10, "Images/btn_image.png")
+
+r1 = Button(10, 212, 1, "Images/btn_png.png")
+r2 = Button(264, 212, 2, "Images/btn_png.png")
+r3 = Button(518, 212, 3, "Images/btn_png.png")
+r4 = Button(772, 212, 4, "Images/btn_png.png")
+r5 = Button(1026, 212, 5, "Images/btn_png.png")
+r6 = Button(10, 466, 6, "Images/btn_png.png")
+r7 = Button(264, 466, 7, "Images/btn_png.png")
+r8 = Button(518, 466, 8, "Images/btn_png.png")
+r9 = Button(772, 466, 9, "Images/btn_png.png")
+r10 = Button(1026, 466, 10, "Images/btn_png.png")
 
 
 lvl1 = pg.image.load("Images/btn_img.png")
-lvl1 = pg.transform.scale(lvl1, (244, 244))
 lvl1_rect = pg.Rect(10, 212, 244, 244)
 
 lvl2 = pg.image.load("Images/btn_img.png")
-lvl2 = pg.transform.scale(lvl2, (244, 244))
 lvl2_rect = pg.Rect(264, 212, 244, 244)
 
 lvl3 = pg.image.load("Images/btn_img.png")
-lvl3 = pg.transform.scale(lvl3, (244, 244))
 lvl3_rect = pg.Rect(518, 212, 244, 244)
 
 lvl4 = pg.image.load("Images/btn_img.png")
-lvl4 = pg.transform.scale(lvl4, (244, 244))
 lvl4_rect = pg.Rect(772, 212, 244, 244)
 
 lvl5 = pg.image.load("Images/btn_img.png")
-lvl5 = pg.transform.scale(lvl5, (244, 244))
 lvl5_rect = pg.Rect(1026, 212, 244, 244)
 
 lvl6 = pg.image.load("Images/btn_img.png")
-lvl6 = pg.transform.scale(lvl6, (244, 244))
 lvl6_rect = pg.Rect(10, 466, 244, 244)
 
 lvl7 = pg.image.load("Images/btn_img.png")
-lvl7 = pg.transform.scale(lvl7, (244, 244))
 lvl7_rect = pg.Rect(264, 466, 244, 244)
 
 lvl8 = pg.image.load("Images/btn_img.png")
-lvl8 = pg.transform.scale(lvl8, (244, 244))
 lvl8_rect = pg.Rect(518, 466, 244, 244)
 
 lvl9 = pg.image.load("Images/btn_img.png")
-lvl9 = pg.transform.scale(lvl9, (244, 244))
 lvl9_rect = pg.Rect(772, 466, 244, 244)
 
 lvl10 = pg.image.load("Images/btn_img.png")
-lvl10 = pg.transform.scale(lvl10, (244, 244))
 lvl10_rect = pg.Rect(1026, 466, 244, 244)
 
 exit_img = pg.image.load("Images/exit.png")
