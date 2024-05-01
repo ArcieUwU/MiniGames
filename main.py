@@ -68,40 +68,40 @@ while state:
         if event.type == pg.QUIT:
             state = False
 
-        # if event.type == pg.MOUSEBUTTONDOWN:
-        #     if event.button == 1:
-        #         if pg.Rect.collidepoint(event.pos):
-        #             background = pg.image.load("Images/bg_puzzle.jpg")
-        #             for index in button_lst:
-        #                 if index == 1:
-        #                     window.blit(exit_img, (1192, 24))
-        #
-        #                 elif index == 2:
-        #                     window.blit(exit_img, (1192, 24))
-        #
-        #                 elif index == 3:
-        #                     window.blit(exit_img, (1192, 24))
-        #
-        #                 elif index == 4:
-        #                     window.blit(exit_img, (1192, 24))
-        #
-        #                 elif index == 5:
-        #                     window.blit(exit_img, (1192, 24))
-        #
-        #                 elif index == 6:
-        #                     window.blit(exit_img, (1192, 24))
-        #
-        #                 elif index == 7:
-        #                     window.blit(exit_img, (1192, 24))
-        #
-        #                 elif index == 8:
-        #                     window.blit(exit_img, (1192, 24))
-        #
-        #                 elif index == 9:
-        #                     window.blit(exit_img, (1192, 24))
-        #
-        #                 elif index == 10:
-        #                     window.blit(exit_img, (1192, 24))
+        if event.type == pg.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                if pg.Rect.collidepoint(event.pos):
+                    background = pg.image.load("Images/bg_puzzle.jpg")
+                    for index in button_lst:
+                        if index == 1:
+                            window.blit(exit_img, (1192, 24))
+
+                        elif index == 2:
+                            window.blit(exit_img, (1192, 24))
+
+                        elif index == 3:
+                            window.blit(exit_img, (1192, 24))
+
+                        elif index == 4:
+                            window.blit(exit_img, (1192, 24))
+
+                        elif index == 5:
+                            window.blit(exit_img, (1192, 24))
+
+                        elif index == 6:
+                            window.blit(exit_img, (1192, 24))
+
+                        elif index == 7:
+                            window.blit(exit_img, (1192, 24))
+
+                        elif index == 8:
+                            window.blit(exit_img, (1192, 24))
+
+                        elif index == 9:
+                            window.blit(exit_img, (1192, 24))
+
+                        elif index == 10:
+                            window.blit(exit_img, (1192, 24))
 
     clock.tick(FPS)
     pg.display.update()
