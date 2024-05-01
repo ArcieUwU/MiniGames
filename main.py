@@ -30,7 +30,7 @@ background_img = pg.image.load("Images/bg_main.jpg")
 
 exit_img = pg.image.load("Images/exit.png")
 exit_img = pg.transform.scale(exit_img, (64, 64))
-
+#123312312312
 class Button:
 
     def __init__(self, x, y, index, image_path):
