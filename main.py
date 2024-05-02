@@ -70,6 +70,7 @@ while state:
 
         # if event.type == pg.MOUSEBUTTONDOWN:
         #     if event.button == 1:
+
         #         for btn in button_lst:
         #             if btn.rect.colliderect(event.pos):
         #                 background = pg.image.load("Images/bg_puzzle.jpg")
@@ -101,6 +102,7 @@ while state:
         #                     window.blit(exit_img, (1192, 24))
         #
         #                 elif btn.index == 10:
+
         #                     window.blit(exit_img, (1192, 24))
 
     clock.tick(FPS)
