@@ -70,37 +70,39 @@ while state:
 
         # if event.type == pg.MOUSEBUTTONDOWN:
         #     if event.button == 1:
-        #         if pg.Rect.collidepoint(event.pos):
-        #             background = pg.image.load("Images/bg_puzzle.jpg")
-        #             for index in button_lst:
-        #                 if index == 1:
+
+        #         for btn in button_lst:
+        #             if btn.rect.colliderect(event.pos):
+        #                 background = pg.image.load("Images/bg_puzzle.jpg")
+        #                 if btn.index == 1:
         #                     window.blit(exit_img, (1192, 24))
-        # 
-        #                 elif index == 2:
+        #
+        #                 elif btn.index == 2:
         #                     window.blit(exit_img, (1192, 24))
-        # 
-        #                 elif index == 3:
+        #
+        #                 elif btn.index == 3:
         #                     window.blit(exit_img, (1192, 24))
-        # 
-        #                 elif index == 4:
+        #
+        #                 elif btn.index == 4:
         #                     window.blit(exit_img, (1192, 24))
-        # 
-        #                 elif index == 5:
+        #
+        #                 elif btn.index == 5:
         #                     window.blit(exit_img, (1192, 24))
-        # 
-        #                 elif index == 6:
+        #
+        #                 elif btn.index == 6:
         #                     window.blit(exit_img, (1192, 24))
-        # 
-        #                 elif index == 7:
+        #
+        #                 elif btn.index == 7:
         #                     window.blit(exit_img, (1192, 24))
-        # 
-        #                 elif index == 8:
+        #
+        #                 elif btn.index == 8:
         #                     window.blit(exit_img, (1192, 24))
-        # 
-        #                 elif index == 9:
+        #
+        #                 elif btn.index == 9:
         #                     window.blit(exit_img, (1192, 24))
-        # 
-        #                 elif index == 10:
+        #
+        #                 elif btn.index == 10:
+
         #                     window.blit(exit_img, (1192, 24))
 
     clock.tick(FPS)
