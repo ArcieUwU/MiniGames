@@ -30,23 +30,23 @@ exit_img = pg.transform.scale(exit_img, (64, 64))
 
 name_text = pg.image.load("Images/name_text.png")
 
-# class Background:
-#     def __init__(self, x, y, image):
-#         self.x = x
-#         self.y = y
-#         self.image = image
-#         self.rect = pg.Rect(self.x, self.y, self.image.get_width(), self.image.get_height())
-#
-#     def remove(self):
-#         for bg in bg_lst:
-#             bg.rect.move_ip(5000, 0)
-#
-#     def draw(self):
-#         for bg in bg_lst:
-#             bg.rect.move_ip(-5000, 0)
+class Background:
+    def __init__(self, x, y, image):
+        self.x = x
+        self.y = y
+        self.image = pg.image.load(image)
+        self.rect = pg.Rect(self.x, self.y, 1280, 720)
 
-# bg_lst = [Background(0, 0, "Images/bg_main.jpg"),
-#           Background(5000, 0, "Images/bg_puzzle.jpg")]
+    def remove(self):
+        for bg in background_lst:
+            bg.rect.move_ip(5000, 0)
+
+    def draw(self):
+        for bg in background_lst:
+            bg.rect.move_ip(-5000, 0)
+
+
+background_lst = [Background(0, 0, "Images/bg_main.jpg"), Background(5000, 0, "Images/bg_puzzle.jpg")]
 class Name:
     def __init__(self, x, y, image):
         self.x = x
@@ -61,6 +61,7 @@ class Name:
     def draw(self):
         for btn in button_lst:
             btn.rect.move_ip(5000, 0)
+
 
 name_lst = [Name(168, 48, "Images/name_text.png")]
 
@@ -94,7 +95,6 @@ class Button:
             btn.rect.move_ip(-5000, 0)
 
 
-
 button_lst = [Button(10, 212, 1, "Images/btn_images/btn_icon1.png"),
               Button(264, 212, 2, "Images/btn_images/btn_icon2.png"),
               Button(518, 212, 3, "Images/btn_images/btn_icon3.png"),
@@ -109,8 +109,8 @@ button_lst = [Button(10, 212, 1, "Images/btn_images/btn_icon1.png"),
 while state:
     window.blit(background, (0, 0))
 
-    # for bg in bg_lst:
-    #     window.blit(bg.image, bg.rect)
+    for bg in background_lst:
+        window.blit(bg.image, bg.rect)
 
     for name in name_lst:
         window.blit(name.image, name.rect)
@@ -129,12 +129,11 @@ while state:
                 for btn in button_lst:
                     if btn.rect.collidepoint(click_pos):
                         background = pg.image.load("Images/bg_puzzle.jpg")
-                        # Background.remove(bg)
+                        Background.remove(bg)
                         Button.remove(btn)
                         Name.remove(name)
                         # if btn.index == 1:
                         #     1
-
 
     clock.tick(FPS)
     pg.display.update()
