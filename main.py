@@ -226,11 +226,11 @@ while state:
         if maze[player_pos[1]][player_pos[0]] == 2:
             lvl1_complete = True
 
+        pg.draw.rect(window, RED, (player_pos[0] * cell_size, player_pos[1] * cell_size, cell_size, cell_size))
+
         if lvl1_complete:
             for comp in completed_lst:
                 window.blit(comp.image, comp.rect)
-
-        pg.draw.rect(window, RED, (player_pos[0] * cell_size, player_pos[1] * cell_size, cell_size, cell_size))
 
         for exit in exit_lst:
             window.blit(exit.image, exit.rect)
