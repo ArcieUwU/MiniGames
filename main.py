@@ -1,4 +1,5 @@
 import pygame as pg
+import random
 
 pg.init()
 width = 1280
@@ -55,9 +56,34 @@ BLACK = (0, 0, 0)
 YELLOW = (255, 200, 0)
 GREEN = (100, 255, 0)
 RED = (255, 0, 0)
+BLUE = (0, 0, 255)
 
+# №2
+paddle_width = 100
+paddle_height = 20
+paddle_speed = 10
 
-pg.display.set_caption("Puzzle Game")
+ball_R = 10
+ball_speed = 5
+
+brick_rows = 8
+brick_columns = 12
+brick_space = 5
+brick_width = (width - (brick_columns + 1) * brick_space) // brick_columns
+brick_height = 30
+
+# Платформа
+paddle = pg.Rect(width // 2 - paddle_width // 2, height - paddle_height - 10, paddle_width, paddle_height)
+
+# Мяч
+ball = pg.Rect(width // 2, height // 2, ball_R * 2, ball_R * 2)
+ball_dx = ball_speed * random.choice((1, -1))
+ball_dy = ball_speed * random.choice((1, -1))
+
+# Блоки
+bricks = [pg.Rect(col * (brick_width + brick_space) + brick_space, row * (brick_height + brick_space) + brick_space, brick_width, brick_height) for row in range(brick_rows) for col in range(brick_columns)]
+
+pg.display.set_caption("MiniGames")
 window = pg.display.set_mode((width, height))
 
 icon = pg.image.load("Images/icon_logo.png")
@@ -67,6 +93,20 @@ background = pg.image.load("Images/bg_main.jpg")
 background = pg.transform.scale(background, (1280, 720))
 
 background_puzzle = pg.image.load("Images/bg_puzzle.jpg")
+
+
+def level2():
+    pg.draw.rect(window, RED, paddle)
+    pg.draw.ellipse(window, WHITE, ball)
+
+    for brick in bricks:
+        pg.draw.rect(window, GREEN, brick)
+
+def reset_ball():
+    global ball_dx, ball_dy
+    ball.x, ball.y = width // 2 - ball_R, height // 2 - ball_R
+    ball_dx, ball_dy = 0, ball_speed
+    pg.time.set_timer(pg.USEREVENT, 3000)
 
 
 pg.display.set_icon(icon)
@@ -96,7 +136,7 @@ class Name:
         self.rect = pg.Rect(self.x, self.y, self.image.get_width(), self.image.get_height())
 
 
-name_lst = [Name(168, 48, "Images/name_text.png")]
+name_lst = [Name(64, 60, "Images/name_text.png")]
 
 class Button:
 
@@ -138,6 +178,7 @@ completed_lst = [Completed(286, 183, "Images/completed.png"),]
 while state:
     window.blit(background, (0, 0))
     pos = pg.mouse.get_pos()
+    font = pg.font.Font("Fonts/ThisAppealFont.otf", 158)
 
     for event in pg.event.get():
         if event.type == pg.QUIT:
@@ -245,7 +286,64 @@ while state:
                         print("left 1")
                         pg.time.delay(200)
         pg.time.delay(50)
-    # elif lvl2:
+
+    elif lvl2:
+        window.blit(background_puzzle, (0, 0))
+
+        if event.type == pg.USEREVENT:
+            ball_dx = ball_speed
+            ball_dy = ball_speed
+
+        keys = pg.key.get_pressed()
+
+        if keys[pg.K_LEFT] and paddle.left > 0:
+            paddle.x -= paddle_speed
+        if keys[pg.K_RIGHT] and paddle.right < width:
+            paddle.x += paddle_speed
+
+        if ball_dx != 0 and ball_dy != 0:
+            ball.x += ball_dx
+            ball.y += ball_dy
+
+        if ball.left <= 0 or ball.right >= width:
+            ball_dx = -ball_dx
+        if ball.top <= 0:
+            ball_dy = -ball_dy
+        if ball.colliderect(paddle):
+            ball_dy = -ball_dy
+
+        hit_index = ball.collidelist(bricks)
+        if hit_index >= 0:
+            brick = bricks[hit_index]
+            if ball.centerx < brick.left or ball.centerx > brick.right:
+                ball_dx = -ball_dx
+            else:
+                ball_dy = -ball_dy
+            bricks.pop(hit_index)
+
+        if ball.bottom >= height:
+            reset_ball()
+        level2()
+
+        if not bricks:
+            lvl2_complete = True
+
+        if lvl2_complete:
+            for comp in completed_lst:
+                window.blit(comp.image, comp.rect)
+
+        for exit in exit_lst:
+            window.blit(exit.image, exit.rect)
+
+        if event.type == pg.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                click_pos = pg.mouse.get_pos()
+                for exit in exit_lst:
+                    if exit.rect.collidepoint(click_pos) and lvl2:
+                        lvl2 = False
+                        menu = True
+                        print("left 2")
+                        pg.time.delay(200)
     # elif lvl3:
     # elif lvl4:
     # elif lvl5:
