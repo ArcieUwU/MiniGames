@@ -1,2 +1,2 @@
-# Puzzle
-Just a game w few puzzle lvls
+Definitely not stolen ideas 100% original
+All rights reserved ©
