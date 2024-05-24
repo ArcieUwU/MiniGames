@@ -28,6 +28,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 YELLOW = (255, 200, 0)
 GREEN = (100, 255, 0)
+DARK_GREEN = (0, 200, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 
@@ -65,7 +66,7 @@ paddle_speed = 10
 ball_R = 10
 ball_speed = 5
 
-brick_rows = 0
+brick_rows = 6
 brick_columns = 12
 brick_space = 5
 brick_width = (width - (brick_columns + 1) * brick_space) // brick_columns
@@ -97,20 +98,43 @@ def reset_ball():
 
 
 # №3
-snake_block = 10
-snake_speed = 15
+borders_size = 40
+MAP_WIDTH = width // borders_size
+MAP_HEIGHT = height // borders_size
 
-def score(score):
-    value = font.render("Score: " + str(score), True, WHITE)
-    window.blit(value, [0, 0])
+snake_pos = [(5, 5), (4, 5), (3, 5)]
+snake_direction = "RIGHT"
+change_to = snake_direction
 
-def snake(snake_block, snake_lst):
-    for x in snake_lst:
-        pg.draw.rect(window, GREEN, [x[0], x[1], snake_block, snake_block])
+apple_pos = (random.randint(1, MAP_WIDTH - 2), random.randint(1, MAP_HEIGHT - 2))
+apple_spawn = True
 
-def message(msg, color):
-    msg = font.render(msg, 1, color)
-    window.blit(msg, [width / 6, height / 3])
+borders = [(x, 0) for x in range(MAP_WIDTH)] + \
+        [(x, MAP_HEIGHT - 1) for x in range(MAP_WIDTH)] + \
+        [(0, y) for y in range(MAP_HEIGHT)] + \
+        [(MAP_WIDTH - 1, y) for y in range(MAP_HEIGHT)]
+
+def snake_game():
+    global snake_pos, snake_direction, change_to, food_pos, food_spawn
+    snake_pos = [(5, 5), (4, 5), (3, 5)]
+    snake_direction = "RIGHT"
+    change_to = snake_direction
+    food_pos = (random.randint(1, MAP_WIDTH - 2), random.randint(1, MAP_HEIGHT - 2))
+    food_spawn = True
+
+
+def snake(snake):
+    for i, pos in enumerate(snake):
+        color = DARK_GREEN if i == 0 else GREEN
+        pg.draw.rect(window, color, pg.Rect(pos[0] * borders_size, pos[1] * borders_size, borders_size, borders_size))
+
+
+def apples(pos):
+    pg.draw.rect(window, RED, pg.Rect(pos[0] * borders_size, pos[1] * borders_size, borders_size, borders_size))
+
+def show_walls():
+    for border in borders:
+        pg.draw.rect(window, BLUE, pg.Rect(border[0] * borders_size, border[1] * borders_size, borders_size, borders_size))
 
 
 # №4
@@ -236,7 +260,6 @@ class Completed:
 completed_lst = [Completed(286, 183, "Images/completed.png"),]
 
 while state:
-    window.blit(background, (0, 0))
     pos = pg.mouse.get_pos()
     font = pg.font.Font("Fonts/ThisAppealFont.otf", 64)
 
@@ -246,7 +269,7 @@ while state:
 
     if main:
         pg.time.Clock().tick(60)
-        background = pg.image.load("Images/bg_main.jpg")
+        window.blit(background, (0, 0))
         for start in start_lst:
             window.blit(start.image, start.rect)
         for name in name_lst:
@@ -263,7 +286,7 @@ while state:
 
     elif menu:
         pg.time.Clock().tick(60)
-        background = pg.image.load("Images/bg_main.jpg")
+        window.blit(background, (0, 0))
         for btn in button_lst:
             window.blit(btn.image, btn.rect)
 
@@ -304,6 +327,7 @@ while state:
                             pg.time.delay(60)
 
     elif lvl1:
+        window.blit(background_puzzle, (0, 0))
         if event.type == pg.KEYDOWN:
             if event.key == pg.K_UP:
                 if maze[player_pos[1] - 1][player_pos[0]] in [0, 2]:
@@ -318,7 +342,7 @@ while state:
                 if maze[player_pos[1]][player_pos[0] + 1] in [0, 2]:
                     player_pos[0] += 1
 
-        window.blit(background_puzzle, (0, 0))
+
         for y, row in enumerate(maze):
             for x, cell in enumerate(row):
                 if cell == 1:
@@ -412,70 +436,61 @@ while state:
                         print("left 2")
                         pg.time.delay(200)
     elif lvl3:
-        game_over = False
-        game_close = False
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_UP and snake_direction != "DOWN":
+                change_to = "UP"
+            elif event.key == pg.K_DOWN and snake_direction != "UP":
+                change_to = "DOWN"
+            elif event.key == pg.K_LEFT and snake_direction != "RIGHT":
+                change_to = "LEFT"
+            elif event.key == pg.K_RIGHT and snake_direction != "LEFT":
+                change_to = "RIGHT"
+
+        if change_to == "UP" and snake_direction != "DOWN":
+            snake_direction = "UP"
+        if change_to == "DOWN" and snake_direction != "UP":
+            snake_direction = "DOWN"
+        if change_to == "LEFT" and snake_direction != "RIGHT":
+            snake_direction = "LEFT"
+        if change_to == "RIGHT" and snake_direction != "LEFT":
+            snake_direction = "RIGHT"
+
+        if snake_direction == "UP":
+            new_head = (snake_pos[0][0], snake_pos[0][1] - 1)
+        elif snake_direction == "DOWN":
+            new_head = (snake_pos[0][0], snake_pos[0][1] + 1)
+        elif snake_direction == "LEFT":
+            new_head = (snake_pos[0][0] - 1, snake_pos[0][1])
+        elif snake_direction == "RIGHT":
+            new_head = (snake_pos[0][0] + 1, snake_pos[0][1])
+
+        snake_pos = [new_head] + snake_pos[:-1]
+
+        if snake_pos[0] == apple_pos:
+            snake_pos.append(snake_pos[-1])
+            apple_spawn = False
+        if not apple_spawn:
+            apple_pos = (random.randint(1, MAP_WIDTH - 2), random.randint(1, MAP_HEIGHT - 2))
+            apple_spawn = True
+
+        if new_head in snake_pos[1:] or new_head in borders or new_head[0] < 0 or new_head[0] >= MAP_WIDTH or new_head[1] < 0 or new_head[1] >= MAP_HEIGHT:
+            snake_game()
+            continue
+
         window.blit(background_puzzle, (0, 0))
-        x1 = width / 2
-        y1 = height / 2
+        snake(snake_pos)
+        apples(apple_pos)
+        show_walls()
 
-        x1_change = 0
-        y1_change = 0
 
-        snake_lst = []
-        snake_len = 1
+        pg.display.flip()
 
-        applex = round(random.randrange(0, width - snake_block) / 10.0) * 10.0
-        appley = round(random.randrange(0, height - snake_block) / 10.0) * 10.0
 
-        while not game_over:
-
-            while game_close:
-                message("You lost. Reenter to restart", WHITE)
-                score(snake_len - 1)
-                pg.display.update()
-
-            for event in pg.event.get():
-                if event.type == pg.KEYDOWN:
-                    if event.key == pg.K_LEFT and x1_change == 0:
-                        x1_change = -snake_block
-                        y1_change = 0
-                    elif event.key == pg.K_RIGHT and x1_change == 0:
-                        x1_change = snake_block
-                        y1_change = 0
-                    elif event.key == pg.K_UP and y1_change == 0:
-                        y1_change = -snake_block
-                        x1_change = 0
-                    elif event.key == pg.K_DOWN and y1_change == 0:
-                        y1_change = snake_block
-                        x1_change = 0
-
-            if x1 >= width or x1 < 0 or y1 >= height or y1 < 0:
-                game_close = True
-            x1 += x1_change
-            y1 += y1_change
-            pg.draw.rect(window, RED, [applex, appley, snake_block, snake_block])
-            snake_Head = [x1, y1]
-            snake_lst.append(snake_Head)
-
-            if len(snake_lst) > snake_len:
-                del snake_lst[0]
-
-            for x in snake_lst[:-1]:
-                if x == snake_Head:
-                    game_close = True
-
-            snake(snake_block, snake_lst)
-            score(snake_len - 1)
-
-            pg.display.update()
-
-            if x1 == applex and y1 == appley:
-                foodx = round(random.randrange(0, width - snake_block) / 10.0) * 10.0
-                foody = round(random.randrange(0, height - snake_block) / 10.0) * 10.0
-                snake_len += 1
 
         for exit in exit_lst:
             window.blit(exit.image, exit.rect)
+
+        pg.time.Clock().tick(8)
 
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1:
@@ -503,7 +518,7 @@ while state:
             eat_dot(new_x, new_y)
 
         if check_win():
-            lvl4_complete
+            lvl4_complete = True
 
         window.blit(background_puzzle, (0, 0))
 
