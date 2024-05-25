@@ -522,9 +522,7 @@ while state:
 
         window.blit(background_puzzle, (0, 0))
 
-        if lvl4_complete:
-            for comp in completed_lst:
-                window.blit(comp.image, comp.rect)
+
 
         for y, row in enumerate(pac_map):
             for x, cell in enumerate(row):
@@ -536,6 +534,10 @@ while state:
 
         pacman_rect = pg.Rect(pac_pos[0] * pac_wall, pac_pos[1] * pac_wall, pac_wall, pac_wall)
         pg.draw.circle(window, YELLOW, pacman_rect.center, pac_wall // 2)
+
+        if lvl4_complete:
+            for comp in completed_lst:
+                window.blit(comp.image, comp.rect)
 
         for exit in exit_lst:
             window.blit(exit.image, exit.rect)
