@@ -33,7 +33,7 @@ RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 
 # №1
-cell_size = 40
+pac_wall = 40
 # 0-пустое место, 1-стена, 2-финиш
 maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -59,6 +59,7 @@ player_pos = [1, 1]
 
 
 # №2
+ball_moving = False
 paddle_width = 100
 paddle_height = 20
 paddle_speed = 10
@@ -91,9 +92,12 @@ def level2():
         pg.draw.rect(window, GREEN, brick)
 
 def reset_ball():
-    global ball_dx, ball_dy
-    ball.x, ball.y = width // 2 - ball_R, height // 2 - ball_R
-    ball_dx, ball_dy = 0, ball_speed
+    global ball_dx, ball_dy, ball_moving
+    ball.x = width // 2 - ball_R
+    ball.y = height // 2 - ball_R
+    ball_dx = 0
+    ball_dy = 0
+    ball_moving = False
     pg.time.set_timer(pg.USEREVENT, 3000)
 
 
@@ -346,14 +350,14 @@ while state:
         for y, row in enumerate(maze):
             for x, cell in enumerate(row):
                 if cell == 1:
-                    pg.draw.rect(window, YELLOW, (x * cell_size, y * cell_size, cell_size, cell_size))
+                    pg.draw.rect(window, YELLOW, (x * pac_wall, y * pac_wall, pac_wall, pac_wall))
                 elif maze[y][x] == 2:
-                    pg.draw.rect(window, GREEN, (x * cell_size, y * cell_size, cell_size, cell_size))
+                    pg.draw.rect(window, GREEN, (x * pac_wall, y * pac_wall, pac_wall, pac_wall))
 
         if maze[player_pos[1]][player_pos[0]] == 2:
             lvl1_complete = True
 
-        pg.draw.rect(window, RED, (player_pos[0] * cell_size, player_pos[1] * cell_size, cell_size, cell_size))
+        pg.draw.rect(window, RED, (player_pos[0] * pac_wall, player_pos[1] * pac_wall, pac_wall, pac_wall))
 
         if lvl1_complete:
             for comp in completed_lst:
@@ -380,8 +384,18 @@ while state:
 
         # Направления
         if event.type == pg.USEREVENT:
-            ball_dx = ball_speed
-            ball_dy = ball_speed
+            if keys[pg.K_LEFT] and paddle.left > 0:
+                paddle.x -= paddle_speed
+                if not ball_moving:
+                    ball_dx = ball_speed * random.choice((1, -1))
+                    ball_dy = ball_speed * random.choice((1, -1))
+                    ball_moving = True
+            if keys[pg.K_RIGHT] and paddle.right < width:
+                paddle.x += paddle_speed
+                if not ball_moving:
+                    ball_dx = ball_speed * random.choice((1, -1))
+                    ball_dy = ball_speed * random.choice((1, -1))
+                    ball_moving = True
 
         keys = pg.key.get_pressed()
 
@@ -396,7 +410,7 @@ while state:
             ball.x += ball_dx
             ball.y += ball_dy
 
-        # Отскоки
+        # Отскоки от стен
         if ball.left <= 0 or ball.right >= width:
             ball_dx = -ball_dx
         if ball.top <= 0:
@@ -522,8 +536,6 @@ while state:
 
         window.blit(background_puzzle, (0, 0))
 
-
-
         for y, row in enumerate(pac_map):
             for x, cell in enumerate(row):
                 rect = pg.Rect(x * pac_wall, y * pac_wall, pac_wall, pac_wall)
@@ -551,7 +563,7 @@ while state:
                         menu = True
                         print("left 4")
                         pg.time.delay(200)
-        pg.time.Clock().tick(12)
+        pg.time.Clock().tick(10)
 
     clock.tick(FPS)
     pg.display.update()
