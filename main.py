@@ -1,5 +1,6 @@
 import pygame as pg
 import random
+import time
 
 pg.init()
 width = 1280
@@ -142,9 +143,9 @@ def show_walls():
 
 
 # №4
-pac_wall = 40
+CELL_SIZE = 40
 
-# 0-Пустое место, 1-стена, 2-Поинт
+# 0 - пустое место, 1 - стена, 2 - точка, 3 - стена врагов
 pac_map = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
@@ -153,7 +154,7 @@ pac_map = [
     [1, 2, 1, 0, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 0, 1, 2, 1],
     [1, 2, 1, 1, 1, 2, 1, 0, 0, 0, 0, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 0, 0, 0, 0, 1, 2, 1, 1, 1, 2, 1],
     [1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1],
-    [1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1],
+    [1, 2, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 3, 3, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1],
     [1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 0, 0, 0, 0, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1],
     [1, 2, 2, 2, 2, 2, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 1],
     [1, 2, 1, 1, 1, 2, 1, 0, 0, 0, 0, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 0, 0, 0, 0, 1, 2, 1, 1, 1, 2, 1],
@@ -166,23 +167,62 @@ pac_map = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
-pac_pos = [4, 16]
-pac_speed = 1
+pacman_pos = [4, 16]
+
+enemies_pos = [[14, 9], [17, 9]]
+enemy_move_counters = [0, 0]
+
+pacman_speed = 1
+
 
 def can_move(x, y):
     if 0 <= x < len(pac_map[0]) and 0 <= y < len(pac_map) and pac_map[y][x] != 1:
         return True
     return False
 
+
+def can_enemy_move(x, y):
+    if 0 <= x < len(pac_map[0]) and 0 <= y < len(pac_map) and (pac_map[y][x] != 1 or pac_map[y][x] == 3):
+        return True
+    return False
+
+
 def eat_dot(x, y):
     if pac_map[y][x] == 2:
         pac_map[y][x] = 0
+
 
 def check_win():
     for row in pac_map:
         if 2 in row:
             return False
     return True
+
+
+def move_enemy(enemy_pos, target_pos, enemy_index):
+    directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+    random.shuffle(directions)
+    best_move = enemy_pos
+    min_dist = float('inf')
+
+    for direction in directions:
+        new_x, new_y = enemy_pos[0] + direction[0], enemy_pos[1] + direction[1]
+        if can_enemy_move(new_x, new_y):
+            dist = abs(new_x - target_pos[0]) + abs(new_y - target_pos[1])
+            if dist < min_dist:
+                min_dist = dist
+                best_move = [new_x, new_y]
+
+    enemy_move_counters[enemy_index] += 1
+    if enemy_move_counters[enemy_index] % 2 == 0:
+        return best_move
+    else:
+        return enemy_pos
+
+
+def check_collision(pos1, pos2):
+    return pos1 == pos2
+
 
 pg.display.set_caption("MiniGames")
 window = pg.display.set_mode((width, height))
@@ -516,40 +556,60 @@ while state:
                         print("left 3")
                         pg.time.delay(200)
     elif lvl4:
-        keys = pg.key.get_pressed()
-        new_x, new_y = pac_pos[0], pac_pos[1]
-        if keys[pg.K_LEFT] and can_move(new_x - pac_speed, new_y):
-            new_x -= pac_speed
-        if keys[pg.K_RIGHT] and can_move(new_x + pac_speed, new_y):
-            new_x += pac_speed
-        if keys[pg.K_UP] and can_move(new_x, new_y - pac_speed):
-            new_y -= pac_speed
-        if keys[pg.K_DOWN] and can_move(new_x, new_y + pac_speed):
-            new_y += pac_speed
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                running = False
 
-        if [new_x, new_y] != pac_pos:
-            pac_pos = [new_x, new_y]
+        keys = pg.key.get_pressed()
+        new_x, new_y = pacman_pos[0], pacman_pos[1]
+        if keys[pg.K_LEFT] and can_move(new_x - pacman_speed, new_y):
+            new_x -= pacman_speed
+        if keys[pg.K_RIGHT] and can_move(new_x + pacman_speed, new_y):
+            new_x += pacman_speed
+        if keys[pg.K_UP] and can_move(new_x, new_y - pacman_speed):
+            new_y -= pacman_speed
+        if keys[pg.K_DOWN] and can_move(new_x, new_y + pacman_speed):
+            new_y += pacman_speed
+
+        if [new_x, new_y] != pacman_pos:
+            pacman_pos = [new_x, new_y]
             eat_dot(new_x, new_y)
 
         if check_win():
             lvl4_complete = True
 
+        if lvl4_complete:
+            for comp in completed_lst:
+                window.blit(comp.image, comp.rect)
+
         window.blit(background_puzzle, (0, 0))
+
+        for i, enemy_pos in enumerate(enemies_pos):
+            enemies_pos[i] = move_enemy(enemy_pos, pacman_pos, i)
+            if check_collision(enemies_pos[i], pacman_pos):
+                print("Game Over")
+                time.sleep(2)
+                pacman_pos = [4, 16]
+                enemies_pos = [[14, 9], [17, 9]]
+                enemy_move_counters = [0, 0]
+                break
 
         for y, row in enumerate(pac_map):
             for x, cell in enumerate(row):
-                rect = pg.Rect(x * pac_wall, y * pac_wall, pac_wall, pac_wall)
+                rect = pg.Rect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
                 if cell == 1:
                     pg.draw.rect(window, BLUE, rect)
                 elif cell == 2:
                     pg.draw.circle(window, WHITE, rect.center, 5)
+                elif cell == 3:
+                    pg.draw.rect(window, GREEN, rect)
 
-        pacman_rect = pg.Rect(pac_pos[0] * pac_wall, pac_pos[1] * pac_wall, pac_wall, pac_wall)
-        pg.draw.circle(window, YELLOW, pacman_rect.center, pac_wall // 2)
+        pacman_rect = pg.Rect(pacman_pos[0] * CELL_SIZE, pacman_pos[1] * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+        pg.draw.circle(window, YELLOW, pacman_rect.center, CELL_SIZE // 2)
 
-        if lvl4_complete:
-            for comp in completed_lst:
-                window.blit(comp.image, comp.rect)
+        for enemy_pos in enemies_pos:
+            enemy_rect = pg.Rect(enemy_pos[0] * CELL_SIZE, enemy_pos[1] * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+            pg.draw.circle(window, RED, enemy_rect.center, CELL_SIZE // 2)
 
         for exit in exit_lst:
             window.blit(exit.image, exit.rect)
@@ -563,7 +623,10 @@ while state:
                         menu = True
                         print("left 4")
                         pg.time.delay(200)
-        pg.time.Clock().tick(10)
+
+        pg.display.flip()
+
+        pg.time.Clock().tick(8)
 
     clock.tick(FPS)
     pg.display.update()
