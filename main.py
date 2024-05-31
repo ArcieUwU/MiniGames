@@ -422,7 +422,6 @@ while state:
     elif lvl2:
         window.blit(background_puzzle, (0, 0))
 
-        # Направления
         if event.type == pg.USEREVENT:
             if keys[pg.K_LEFT] and paddle.left > 0:
                 paddle.x -= paddle_speed
@@ -439,18 +438,15 @@ while state:
 
         keys = pg.key.get_pressed()
 
-        # Движение платформы
         if keys[pg.K_LEFT] and paddle.left > 0:
             paddle.x -= paddle_speed
         if keys[pg.K_RIGHT] and paddle.right < width:
             paddle.x += paddle_speed
 
-        # Движение мяча
         if ball_dx != 0 and ball_dy != 0:
             ball.x += ball_dx
             ball.y += ball_dy
 
-        # Отскоки от стен
         if ball.left <= 0 or ball.right >= width:
             ball_dx = -ball_dx
         if ball.top <= 0:
@@ -458,7 +454,6 @@ while state:
         if ball.colliderect(paddle):
             ball_dy = -ball_dy
 
-        # Удары по блокам
         hit_index = ball.collidelist(bricks)
         if hit_index >= 0:
             brick = bricks[hit_index]
@@ -468,7 +463,6 @@ while state:
                 ball_dy = -ball_dy
             bricks.pop(hit_index)
 
-        # Сброс мяча
         if ball.bottom >= height:
             reset_ball()
         level2()
